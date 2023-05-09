@@ -13,16 +13,17 @@ theme_stigler <- function() {
         italic = "Trade Gothic LT Std/Trade Gothic LT Std Oblique.otf"
     )
     showtext_auto()
+    showtext_opts(dpi = 300)
 
     font <- "Trade Gothic LT Std"
     theme_minimal() %+replace%
         theme(
 
             ### DEBUGGING
-            plot.background = element_rect(
-                color = "palevioletred1",
-                linewidth = 3
-            ),
+            # plot.background = element_rect(
+            #     color = "palevioletred1",
+            #     linewidth = 3
+            # ),
 
             ### Setup
             plot.margin = margin(t = 20, r = 20, b = 20, l = 20),
@@ -40,22 +41,22 @@ theme_stigler <- function() {
                 hjust = 0, # hjust = 0 "left-aligned"
                 vjust = 0, # vjust = 0 "top-aligned"
                 margin = margin(t = 2.5, r = 0, b = 0, l = 0, unit = "pt"),
-                debug = TRUE
+                debug = FALSE
             ),
             plot.subtitle = element_markdown(
                 size = 16, # Size (pt)
                 hjust = 0, # hjust = 0 "left-aligned"
                 vjust = 0, # vjust = 0 "top-aligned"
                 margin = margin(t = 5, r = 0, b = 0, l = 0, unit = "pt"),
-                debug = TRUE
+                debug = FALSE
             ),
             plot.caption.position = "panel",
-            plot.caption = element_text(
+            plot.caption = element_markdown(
                 size = 12,
                 hjust = 0,
                 vjust = 0,
                 margin = margin(t = 5, r = 0, b = 0, l = 0, unit = "pt"),
-                debug = TRUE
+                debug = FALSE
             ),
             plot.tag.position = c(0, 1),
             plot.tag = element_text(
@@ -63,7 +64,7 @@ theme_stigler <- function() {
                 color = "#800000",
                 hjust = 0,
                 vjust = 0,
-                debug = TRUE
+                debug = FALSE
             ),
 
             ### Axes
@@ -74,7 +75,7 @@ theme_stigler <- function() {
                 hjust = 0.5,
                 vjust = 1,
                 margin = margin(t = 5, r = 0, b = 0, l = 0, unit = "pt"),
-                debug = TRUE
+                debug = FALSE
             ),
             axis.title.y = element_blank(),
             axis.text = element_text(
@@ -84,7 +85,7 @@ theme_stigler <- function() {
                 hjust = 1,
                 vjust = -0.5,
                 margin = margin(t = -0, r = 10, b = 0, l = -40, unit = "pt"),
-                debug = TRUE
+                debug = FALSE
             ),
             axis.line.x = element_line(
                 color = "black",
@@ -109,14 +110,14 @@ theme_stigler <- function() {
                 size = 12,
                 hjust = 0,
                 vjust = 0.5,
-                debug = TRUE
+                debug = FALSE
             ),
             legend.text = element_markdown(
                 family = font,
                 size = 12,
                 hjust = 0,
                 vjust = 0.5,
-                debug = TRUE
+                debug = FALSE
             )
         )
 }
@@ -169,6 +170,18 @@ stigler_palettes <- list(
         "sky_blue",
         "celeste",
         "midnight_green"
+    ),
+    `red_to_blue` = stigler_cols(
+        "booth_maroon",
+        "booth_teal"
+    ),
+    `reds_2` = stigler_cols(
+        "black_bean",
+        "pale_tangerine"
+    ),
+    `blues_2` = stigler_cols(
+        "midnight_green",
+        "celeste"
     )
 )
 
@@ -200,11 +213,11 @@ scale_fill_stigler <- function(
     discrete = TRUE,
     ...
 ) {
-    pal <- stigler_pal(palette = palette, reverse = reverse,...)
+    pal <- stigler_pal(palette = palette, reverse = reverse, ...)
     if (discrete) {
         discrete_scale("fill", paste0("stigler_", palette), palette = pal, ...)
     } else {
-        scale_fill_gradient(colors = pal(256), ...)
+        scale_fill_gradientn(colors = pal(256), ...)
     }
 
 }
