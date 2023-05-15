@@ -13,6 +13,29 @@ data_in <- read_excel(
     "crony_capitalism_survey_2.xlsx"
 )
 
+crony_capitalism_1_in <- read_excel(
+    "crony_capitalism_survey_1.xlsx"
+)
+
+crony_capitalism_1_df <- crony_capitalism_1_in %>%
+    select(
+        mckinsey_2, mckinsey_3, sensetime_4, ibm_5
+    ) %>%
+    pivot_longer(
+        cols = c(mckinsey_2, mckinsey_3, sensetime_4, ibm_5),
+        names_to = "question_name",
+        values_to = "alt_salary"
+    ) %>%
+    group_by(
+        question_name
+    ) %>%
+    summarize(
+        mean_alt_salary = mean(alt_salary, na.rm = TRUE),
+        median_alt_salary = median(alt_salary, na.rm = TRUE)
+    ) %>%
+    view()
+
+
 df <- data_in %>%
     select(
         id, farandia_1, farandia_2, farandia_3, farandia_4,
@@ -137,6 +160,75 @@ ggsave(
     units = "in",
     dpi = 300
 )
+
+mean_alt_salaries_df <- df %>%
+    select(farandia_2, farandia_4) %>%
+    pivot_longer(
+        cols = c(farandia_2, farandia_4),
+        names_to = "question_name",
+        values_to = "alt_salary"
+    ) %>%
+    group_by(question_name) %>%
+    summarize(
+        mean_alt_salary = mean(alt_salary, na.rm = TRUE),
+        median_alt_salary = median(alt_salary, na.rm = TRUE)
+    ) %>%
+    rbind(
+        crony_capitalism_1_df
+    ) %>%
+    pivot_longer(
+        cols = c("mean_alt_salary", "median_alt_salary"),
+        names_to = "statistic",
+        values_to = "alt_salary"
+    ) %>%
+    mutate(
+        salary_cut = case_when(
+            str_detect("mckinsey", question_name) ~ 120000 - alt_salary,
+            TRUE ~ 100000 - alt_salary
+        )
+    ) %>%
+    view()
+
+
+ggplot(mean_alt_salaries_df) +
+    geom_col(
+        aes(
+            x = question_name,
+            y = salary_cut,
+            fill = statistic,
+            group = statistic
+        ),
+        position = "dodge"
+    ) +
+    scale_fill_stigler(
+        name = "Statistic",
+        breaks = c("mean_alt_salary", "median_alt_salary"),
+        labels = c("Mean", "Median")
+    ) +
+    scale_y_reverse(
+        labels = scales::dollar,
+        position = "right",
+        expand = expansion(mult = 0)
+    ) +
+    scale_x_discrete(
+        name = "Question",
+        limits = c(
+            "mckinsey_2", "mckinsey_3", "sensetime_4",
+            "ibm_5", "farandia_2", "farandia_4"
+        ),
+        labels = c(
+            "McKinsey -- MBS", "McKinsey -- Colleagues", "SenseTime", "IBM", "ACME", "ACME -- Upstream"
+        ),
+        position = "top"
+    ) + 
+    labs(
+        title = "Maximum-acceptable salary cuts",
+        subtitle = "US Dollars, 2023",
+        tag = "Figure 2",
+        notes = "Note : Initial compensation for McKinsey assumed to be $120,000; all others have initial compensation of $100,000"
+    ) + 
+    theme_stigler()
+
 
 #### TABLES ####
 ########## Crosstab Salary by Academic Program ##########
