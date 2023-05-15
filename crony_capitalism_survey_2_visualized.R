@@ -161,7 +161,10 @@ ggsave(
     dpi = 300
 )
 
-mean_alt_salaries_df <- df %>%
+########## Figure 2: Salary Cuts ##########
+
+
+alt_salaries_df <- df %>%
     select(farandia_2, farandia_4) %>%
     pivot_longer(
         cols = c(farandia_2, farandia_4),
@@ -186,6 +189,30 @@ mean_alt_salaries_df <- df %>%
             str_detect("mckinsey", question_name) ~ 120000 - alt_salary,
             TRUE ~ 100000 - alt_salary
         )
+    ) %>%
+    view()
+
+alt_salaries_df %>%
+    mutate(
+        question_name = case_when(
+            question_name == "farandia_2" ~ "ACME",
+            question_name == "farandia_4" ~ "ACME -- Upstream",
+            question_name == "mckinsey_2" ~ "McKinsey -- MBS",
+            question_name == "mckinsey_3" ~ "McKinsey -- Colleagues",
+            question_name == "sensetime_4" ~ "SenseTime",
+            question_name == "ibm_5" ~ "IBM",
+        ),
+        statistic = case_when(
+            statistic == "mean_alt_salary" ~ "Mean",
+            statistic == "median_alt_salary" ~ "Median",
+        )
+    ) %>%
+    rename(
+        "Alternative_salary" = "alt_salary",
+        "Salary_cut" = "salary_cut"
+    ) %>%
+    write_csv(
+        "crony_capitalism_2_figs/aggregated_alternative_salaires.csv"
     ) %>%
     view()
 
@@ -228,6 +255,16 @@ ggplot(mean_alt_salaries_df) +
         notes = "Note : Initial compensation for McKinsey assumed to be $120,000; all others have initial compensation of $100,000"
     ) + 
     theme_stigler()
+
+
+ggsave(
+    plot = last_plot(),
+    filename = "crony_capitalism_2_figs/figure_2_mean_med_salary_cuts.png",
+    width = 11.5,
+    height = 6.57,
+    units = "in",
+    dpi = 300
+)
 
 
 #### TABLES ####
