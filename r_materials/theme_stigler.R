@@ -96,18 +96,34 @@ theme_stigler <- function() {
             ),
             axis.ticks.length.x = unit(5, unit = "pt"),
 
-            ### Panel features
+            ### Panel features: GRID LINES
             panel.grid.major.x = element_blank(),
             panel.grid.minor.x = element_blank(),
             panel.grid.minor.y = element_blank(),
 
+            ### Panel features: Text and faceting
+            # panel.border = element_rect(
+            #     linewidth = 1,
+            #     color = "blue"
+            # ),
+            strip.text = element_text(
+                hjust = 0,
+                vjust = 0,
+                size = 12,
+                margin = margin(t = 0, r = 0, b = 0, l = 0, unit = "pt"),
+                debug = FALSE
+            ),
+            # strip.background = element_rect(
+            #     linewidth = 1,
+            #     color = "red"
+            # ),
+
             ### Legend features
             legend.position = "top",
             legend.justification = "left",
-            legend.box.margin = margin(t = 5, r = 5, b = 5, l = 0, unit = "pt"),
+            legend.box.margin = margin(t = 5, r = 5, b = 2, l = 0, unit = "pt"),
             legend.margin = margin(t = 5, r = 5, b = 5, l = 0, unit = "pt"),
             legend.title.align = 0,
-            # legend.key.size = unit(20, unit = "pt"),
             legend.title = element_markdown(
                 family = font,
                 size = 14,
