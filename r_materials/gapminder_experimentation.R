@@ -1,5 +1,7 @@
 library(tidyverse)
 library(gapminder)
+library(scales)
+library(ggdist)
 source("r_materials/theme_stigler.R")
 
 print(getwd())
@@ -17,37 +19,7 @@ create_footer <- function(source_text, notes_text) {
     return(footer)
 }
 
-
-finalise_plot <- function(
-    plot_object,
-    figure_number,
-    title_text,
-    subtitle_text,
-    source_text,
-    notes_text,
-    # save_filepath = file.path(Sys.getenv("TMPDIR", "tmp-nc.png")),
-    plot_width = 695,
-    plot_height = 450 
-) {
-    touching_up_plot <- plot_object +
-        labs(
-            title = title_text,
-            subtitle = subtitle_text,
-            tag = paste0("Figure ", figure_number)
-        )
-    footer <- create_footer(source_text, notes_text)
-    plot_grid <- ggpubr::ggarrange(
-        touching_up_plot,
-        footer,
-        ncol = 1,
-        nrow = 2,
-        heights = c(1, 0.045/(plot_height/450))
-    )
-    plot_grid
-}
-
-
-test_plot <- ggplot(
+ggplot(
     df %>%
         filter(year == 2007)
 ) +
@@ -60,25 +32,33 @@ test_plot <- ggplot(
         ),
         alpha = 0.8
     ) +
-    labs(
-        title = "**Life __expectancy__ vs GDP per Capita**",
-        subtitle = "Years",
-        caption = "Caption text goes here:",
-        tag = "Figure X"
+    scale_x_continuous(
+        name = "GDP per capita",
+        labels = scales::dollar
     ) +
     scale_y_continuous(
         position = "right",
         name = "this is a test y-axis title"
     ) +
     scale_color_stigler(
-        name = element_blank()
+        palette = "main",
+        name = "Continent"
     ) +
     scale_size_binned(
-        guide = "none"
+        guide  = "none"
+    ) +
+    guides(
+        color = guide_legend(
+            override.aes = list(size = 4)
+        )
+    ) +
+    labs(
+        title = "**Life __expectancy__ vs GDP per Capita**",
+        subtitle = "Years",
+        caption = "Caption text goes here:",
+        tag = "Figure X"
     ) +
     theme_stigler()
-test_plot
-
 
 ### To-Dos
 # - Start splitting out functions and themes into separate files.

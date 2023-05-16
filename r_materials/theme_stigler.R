@@ -40,7 +40,7 @@ theme_stigler <- function() {
                 size = 18, # Size (pt)
                 hjust = 0, # hjust = 0 "left-aligned"
                 vjust = 0, # vjust = 0 "top-aligned"
-                margin = margin(t = 2.5, r = 0, b = 0, l = 0, unit = "pt"),
+                margin = margin(t = 5, r = 0, b = 0, l = 0, unit = "pt"),
                 debug = FALSE
             ),
             plot.subtitle = element_markdown(
@@ -104,21 +104,24 @@ theme_stigler <- function() {
             ### Legend features
             legend.position = "top",
             legend.justification = "left",
+            legend.box.margin = margin(t = 5, r = 5, b = 5, l = 0, unit = "pt"),
+            legend.margin = margin(t = 5, r = 5, b = 5, l = 0, unit = "pt"),
             legend.title.align = 0,
+            # legend.key.size = unit(20, unit = "pt"),
             legend.title = element_markdown(
                 family = font,
-                size = 12,
-                hjust = 0,
+                size = 14,
+                hjust = -1,
                 vjust = 0.5,
                 debug = FALSE
             ),
             legend.text = element_markdown(
                 family = font,
-                size = 12,
+                size = 14,
                 hjust = 0,
                 vjust = 0.5,
                 debug = FALSE
-            )
+            ),
         )
 }
 
