@@ -8,17 +8,6 @@ print(getwd())
 
 df <- gapminder
 
-create_footer <- function(source_text, notes_text) {
-    footer_text <- paste0(source_text, notes_text, sep = "\n")
-
-    footer <- grid::grobTree(
-        grid::linesGrob(x = grid::unit(c(0, 1), "npc"), y = grid::unit(1.1, "npc")),
-        grid::textGrob(footer_text, x = 0.004, hjust = 0, gp = grid::gpar(fontsize=12, fontfamily="Trade Gothic LT Std"))
-    )
-
-    return(footer)
-}
-
 ##### EXAMPLE BUBBLE CHART, W/ PANELS #####
 ggplot(
     df %>%
@@ -92,9 +81,9 @@ ggplot(
     scale_y_continuous(
         position = "right"
     ) +
-    scale_color_stigler(
-        name = "Country"
-    ) +
+    # scale_color_stigler(
+    #     name = "Country"
+    # ) +
     labs(
         title = "Life Expectancy over Time",
         subtitle = "Years, selected countries",
