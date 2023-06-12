@@ -41,7 +41,7 @@ source(theme_stigler_path)
 df <- mtcars %>%
     mutate(cyl = as_factor(cyl))
 
-ggplot(df) + 
+p <- ggplot(df) + 
     geom_point(
         aes(
             x = disp,
@@ -71,6 +71,14 @@ ggplot(df) +
     # Applies fonts, spacing, line stylings etc.
     theme_stigler()
 
-
+# We like to output to .jpg with some multiple of 16:9 aspect ratios
+ggsave(
+    "plotname.jpg"
+    plot = p,
+    width = 8,
+    height = 4.5,
+    units = "in",
+    dpi = 300
+)
 
 ```
