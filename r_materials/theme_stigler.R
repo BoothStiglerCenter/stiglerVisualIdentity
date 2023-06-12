@@ -40,7 +40,7 @@ theme_stigler <- function() {
                 size = 18, # Size (pt)
                 hjust = 0, # hjust = 0 "left-aligned"
                 vjust = 0, # vjust = 0 "top-aligned"
-                margin = margin(t = 5, r = 0, b = 0, l = 0, unit = "pt"),
+                margin = margin(t = 2.5, r = 0, b = 0, l = 0, unit = "pt"),
                 debug = FALSE
             ),
             plot.subtitle = element_markdown(
@@ -51,7 +51,7 @@ theme_stigler <- function() {
                 debug = FALSE
             ),
             plot.caption.position = "panel",
-            plot.caption = element_markdown(
+            plot.caption = element_text(
                 size = 12,
                 hjust = 0,
                 vjust = 0,
@@ -96,48 +96,29 @@ theme_stigler <- function() {
             ),
             axis.ticks.length.x = unit(5, unit = "pt"),
 
-            ### Panel features: GRID LINES
+            ### Panel features
             panel.grid.major.x = element_blank(),
             panel.grid.minor.x = element_blank(),
             panel.grid.minor.y = element_blank(),
 
-            ### Panel features: Text and faceting
-            # panel.border = element_rect(
-            #     linewidth = 1,
-            #     color = "blue"
-            # ),
-            strip.text = element_text(
-                hjust = 0,
-                vjust = 0,
-                size = 12,
-                margin = margin(t = 0, r = 0, b = 0, l = 0, unit = "pt"),
-                debug = FALSE
-            ),
-            # strip.background = element_rect(
-            #     linewidth = 1,
-            #     color = "red"
-            # ),
-
             ### Legend features
             legend.position = "top",
             legend.justification = "left",
-            legend.box.margin = margin(t = 5, r = 5, b = 2, l = 0, unit = "pt"),
-            legend.margin = margin(t = 5, r = 5, b = 5, l = 0, unit = "pt"),
             legend.title.align = 0,
             legend.title = element_markdown(
                 family = font,
-                size = 14,
-                hjust = -1,
+                size = 12,
+                hjust = 0,
                 vjust = 0.5,
                 debug = FALSE
             ),
             legend.text = element_markdown(
                 family = font,
-                size = 14,
+                size = 12,
                 hjust = 0,
                 vjust = 0.5,
                 debug = FALSE
-            ),
+            )
         )
 }
 
@@ -153,6 +134,7 @@ stigler_colors <- c(
     munsell_blue = "#4C8F98",
     sky_blue = "#7EC0CA",
     celeste = "#BAF5FF"
+    # temp = "#14CCB0"
 )
 
 stigler_cols <- function(...) {
@@ -192,7 +174,8 @@ stigler_palettes <- list(
     ),
     `red_to_blue` = stigler_cols(
         "booth_maroon",
-        "booth_teal"
+        # "booth_teal"
+        "munsell_blue"
     ),
     `reds_2` = stigler_cols(
         "black_bean",
@@ -232,11 +215,11 @@ scale_fill_stigler <- function(
     discrete = TRUE,
     ...
 ) {
-    pal <- stigler_pal(palette = palette, reverse = reverse, ...)
+    pal <- stigler_pal(palette = palette, reverse = reverse,...)
     if (discrete) {
         discrete_scale("fill", paste0("stigler_", palette), palette = pal, ...)
     } else {
-        scale_fill_gradientn(colors = pal(256), ...)
+        scale_fill_gradient(colors = pal(256), ...)
     }
 
 }
