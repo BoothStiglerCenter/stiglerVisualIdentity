@@ -71,12 +71,12 @@ p <- ggplot(df) +
     # Applies fonts, spacing, line stylings etc.
     theme_stigler()
 
-# We like to output to .jpg with some multiple of 16:9 aspect ratios
+# We like to output to .jpg with some multiple of 16:9 aspect ratios (which we can then scale up and down as we see fit)
 ggsave(
-    "plotname.jpg"
+    filename = "plotname.jpg",
     plot = p,
-    width = 8,
-    height = 4.5,
+    width = 16,
+    height = 9,
     units = "in",
     dpi = 300
 )
