@@ -1,16 +1,39 @@
 require(showtext)
+require(stringr)
 require(ggpubr)
 require(ggtext)
 
+### Helper function to automatically identify Trade Gothic LT Std font paths
+finding_font_folders <- function(dirs_to_search) {
+    eligible_machine_font_paths <- font_paths(dirs_to_search)
 
-
+    for (path in eligible_machine_font_paths) {
+        files <- list.files(path = path, recursive = TRUE)
+        font_family_name_matches <- grep("Trade Gothic LT Std", files)
+        if (length(font_family_name_matches) > 0) {
+            folder_name <- dirname(files[font_family_name_matches[1]])
+            path_to_font_files <- paste(path, folder_name, sep = "\\")
+            return (path_to_font_files)
+        } else {
+            print("NOT IN THIS FOLDER")
+        }
+    }
+    return (FALSE)
+}
 
 theme_stigler <- function() {
+
+    font_folder_path <- finding_font_folders(c("."))
+    try(
+        if (font_folder_path == FALSE)
+        stop("FONT FOLDER NOT FOUND")
+    )
+
     font_add(
         family = "Trade Gothic LT Std",
-        regular = "Trade Gothic LT Std/Trade Gothic LT Std Regular.otf",
-        bold = "Trade Gothic LT Std/Trade Gothic LT Std Bold.otf",
-        italic = "Trade Gothic LT Std/Trade Gothic LT Std Oblique.otf"
+        regular = paste(font_folder_path, "Trade Gothic LT Std Regular.otf", sep = "\\"),
+        bold = paste(font_folder_path, "Trade Gothic LT Std Bold.otf", sep = "\\"),
+        italic = paste(font_folder_path, "Trade Gothic LT Std Oblique.otf", sep = "\\"),
     )
     showtext_auto()
     showtext_opts(dpi = 300)
