@@ -87,6 +87,7 @@ theme_stigler <- function() {
                 color = "#800000",
                 hjust = 0,
                 vjust = 0,
+                margin = margin(t = 5, r = 0 , b = 5, l = 0, unit = "pt"),
                 debug = FALSE
             ),
 
@@ -107,7 +108,7 @@ theme_stigler <- function() {
             axis.text.y.right = element_text(
                 hjust = 1,
                 vjust = -0.5,
-                margin = margin(t = -0, r = 10, b = 0, l = -40, unit = "pt"),
+                margin = margin(t = -0, r = 10, b = 0, l = -20, unit = "pt"),
                 debug = FALSE
             ),
             axis.line.x = element_line(
@@ -118,11 +119,6 @@ theme_stigler <- function() {
                 color = "black",
             ),
             axis.ticks.length.x = unit(5, unit = "pt"),
-
-            ### Panel features
-            panel.grid.major.x = element_blank(),
-            panel.grid.minor.x = element_blank(),
-            panel.grid.minor.y = element_blank(),
 
             ### Legend features
             legend.position = "top",
@@ -141,6 +137,21 @@ theme_stigler <- function() {
                 hjust = 0,
                 vjust = 0.5,
                 debug = FALSE
+            ),
+            
+            ### Panel features
+            panel.grid.major.x = element_blank(),
+            panel.grid.minor.x = element_blank(),
+            panel.grid.minor.y = element_blank(),
+
+            ### Facet features
+            strip.text = element_text(
+                hjust = 0,
+                vjust = 0.5,
+                family = font,
+                face = "bold",
+                size = 12,
+                margin = margin(t = 5, r = 5, b = 6, l = 5, unit = "pt")
             )
         )
 }

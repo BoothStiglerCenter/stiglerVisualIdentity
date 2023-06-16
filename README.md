@@ -33,10 +33,9 @@ Because this system and this documentation are largely digital-first, color valu
 
 
 - [x] Core discrete
-  - [ ] Do I still need to identify accent colors? Probably a yellow or a purple?
 - [ ] Spectral (Brewer)
 - [ ] Special
-  - [ ] US Partisan
+  - [x] US Partisan
 
 
 ## Thinking about Data Visualization and Charts
