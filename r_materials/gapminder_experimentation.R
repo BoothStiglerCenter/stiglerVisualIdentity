@@ -45,7 +45,7 @@ scatter_facet <- ggplot(
     labs(
         title = "**Life expectancy vs GDP per Capita**",
         subtitle = "Years",
-        caption = "US dollars are adjusted for inflation.",
+        caption = "Note: US dollars are adjusted for inflation.",
         tag = "Figure X"
     ) +
     theme_stigler() +

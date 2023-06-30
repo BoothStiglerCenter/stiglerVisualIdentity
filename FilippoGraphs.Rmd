@@ -1,0 +1,171 @@
+---
+title: "Filippo Antitrust Graphs"
+author: "Jonathan Lee"
+date: '2023-05-15'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(readxl)
+library(showtext)
+library(ggtext)
+
+cases <- read_xlsx("V3 1945 to 2022 - Antitrust litigation.xlsx") %>%
+  filter(1945 <= Year,
+         Year <= 2022)
+```
+
+```{r}
+source("r_materials/theme_stigler.r")
+
+antiAll <- ggplot(
+  cases %>%
+  select(
+    "Year", "AllAntitrust", "PublicAntitrust", "PrivateAntitrust"
+  ) %>%
+  pivot_longer(
+      cols = c("AllAntitrust", "PublicAntitrust", "PrivateAntitrust"),
+      names_to = "Type",
+      values_to = "count"
+  ) %>%
+  mutate(
+    Type = case_when(
+      Type == "AllAntitrust" ~ "All",
+      Type == "PublicAntitrust" ~ "Public",
+      Type == "PrivateAntitrust" ~ "Private"
+    )
+  )) + 
+  geom_line(
+    aes(
+      x = Year,
+      y = count,
+      group = Type,
+      color = Type
+    ),
+    linewidth = 2
+  ) +
+  labs(title = "**Antitrust Cases (1945 - 2022)**",
+       color = "Case Type",
+       tag = "Figure X") + 
+  scale_color_stigler() + 
+  scale_y_continuous(
+    labels = scales::comma,
+    position = "right",
+    expand = expansion(mult = 0)
+  ) +
+  theme_stigler() +
+  theme(axis.title.x = element_blank())
+
+ggsave("Antitrust Cases.jpeg", antiAll, 
+       width = 16, height = 9, units = "in", dpi = 300)
+```
+
+```{r}
+civCrim <- ggplot(
+  cases %>%
+    select(
+      "Year", "PublicAntitrust", "PublicCivil", "PublicCriminal"
+    ) %>%
+    pivot_longer(
+      cols = c("PublicAntitrust", "PublicCivil", "PublicCriminal"),
+      names_to = "Type",
+      values_to = "count"
+    ) %>%
+    mutate(
+      Type = case_when(
+        Type == "PublicAntitrust" ~ "All Public",
+        Type == "PublicCivil" ~ "Civil",
+        Type == "PublicCriminal" ~ "Criminal",
+      )
+    )
+  ) +
+  geom_line(
+    aes(
+      x = Year,
+      y = count,
+      group = Type,
+      color = Type
+    ),
+    linewidth = 2
+  ) +
+  labs(title = "**Public Antitrust Cases (Civil/Criminal)**",
+       color = "",
+       tag = "Figure Y") + 
+  scale_color_stigler(palette = "blues") + 
+  scale_y_continuous(
+    position = "right"
+  ) +
+  theme_stigler() + 
+  theme(axis.title.x = element_blank())
+
+ggsave("Civil and Criminal Antitrust Cases.jpeg", civCrim, 
+       width = 16, height = 9, units = "in", dpi = 300)
+```
+
+```{r}
+p <- ggplot(data = cases, mapping = aes(x = Year)) + 
+  geom_line(
+    aes(
+      y = PublicAntitrust,
+      color = "Public"
+    ),
+    linewidth = 2
+  ) + 
+  geom_line(
+    aes(
+      y = PrivateAntitrust,
+      color = "Private"
+    ),
+    linewidth = 2
+  ) + 
+  geom_line(
+    aes(
+      y = Copyright,
+      color = "Copyright"
+    ),
+    linewidth = 1.25,
+    linetype = "dashed"
+  ) + 
+  geom_line(
+    aes(
+      y = Patent,
+      color = "Patent"
+    ),
+    linewidth = 1.25,
+    linetype = "dashed"
+  ) + 
+  geom_line(
+    aes(
+      y = Trademark,
+      color = "Trademark"
+    ),
+    linewidth = 1.25,
+    linetype = "dashed"
+  ) +
+  geom_line(
+    aes(
+      y = AllSecurities,
+      color = "Securities"
+    ),
+    linewidth = 1.25,
+    linetype = "dashed"
+  )
+
+privCase <- p + lims(x = c(1945, 2022)) + 
+  labs(title = "**Private Cases Filed in Federal Court**",
+       color = "Case Type",
+       tag = "Figure Z"
+      ) + 
+  scale_color_stigler() +  
+  scale_y_continuous(
+    position = "right",
+    labels = scales::comma,
+    expand = expansion(mult = 0)
+  ) +
+  theme_stigler() + 
+  theme(axis.title.x = element_blank())
+
+ggsave("Private Cases.jpeg", privCase, 
+       width = 16, height = 9, units = "in", dpi = 300)
+```
